@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<style> 
+body {
+  background-color: #ededed;
+}
+
+.content {
+  max-width: 300px;
+  margin: auto;
+  margin-top: 30px;
+  padding: 10px;
+
+}
+
+#total {
+  border-radius: 5px;
+  border: none;
+  outline:none;
+  background: white;
+  padding: 15px; 
+  width: 100%;
+  box-sizing: border-box;
+  height: 40px;
+  margin-bottom: 7px;
+  letter-spacing: 2px;
+  font-size: 16px;
+  font-family: Helvetica, sans-serif;
+  color: #5ac0ff;
+  text-align: right;
+}
+
+#numb {
+  white-space: pre-wrap;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  background: white;
+  padding: 15px;
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+  height: 300px;
+  margin-bottom: 7px;
+  letter-spacing: 2px;
+  line-height: 24px;
+  font-size: 16px;
+  font-family: Helvetica, sans-serif;
+  color: #5ac0ff;
+  text-align: right;
+}
+
+#numb:empty:before {
+  content: attr(placeholder);
+  display: block;
+  color: Gray;
+}
+
+#button {
+  border-radius: 5px;
+  background-color: #37ed95;
+  transition-duration: 0.4s;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 15px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  letter-spacing: 2px;
+  font-size: 16px;
+  font-family: Helvetica, sans-serif;
+  cursor: pointer;
+  width: 100%;
+}
+
+#button:hover {
+  background-color: #5ac0ff;
+}
+
+#button:active {
+  background-color: #44a5e3;
+  transition: 0s;
+}
+
+.result {
+  border-radius: 5px;
+  background-color: lightgray;
+  margin-top: 5px;
+  padding: 15px;
+  letter-spacing: 2px;
+  line-height: 24px;
+  font-size: 16px;
+  font-family: Helvetica, sans-serif;
+}
+
+.hit {
+  color: white;
+  background-color: #44a5e3;
+}
+
+</style>
+
+<div class="content">
+<input id="total" placeholder="Total">
+
+<div id="numb" contenteditable placeholder="Delar"></div>
+
+<button type="button" id="button" onclick="myFunction()">HITTA</button>
+
+<p id="demo"></p>
+
+</div>
+
+<script>
+function myFunction() {
+  var x, a, b, n, text, nrHits;
+  var i, j, part, sum, partsArray, indexArray, oneHitArray, partsString;
+  text = "";
+  nrHits = 0;
+
+  total = document.getElementById("total").value;
+  total = parseCommaFloat(total);
+
+  x = document.getElementById("numb").value;
+  x = document.getElementById("numb").innerHTML.replace(/<(.*?)>/g, "\n");
+
+  x = x.split("\n");
+
+  x = x.filter(function(el) { return el; }); //Remove empty items
+  a = x.map(parseCommaFloat);
+  //console.log(a);
+  n = a.length;
+  numComb = (2 ** a.length) - 1;
+
+  for (i = 1; i <= numComb; i++) {
+    part = i;
+    sum = 0;
+    partsArray = [];
+    indexArray = [];
+    partsString = "";
+    for (j = 0; j < n; j++) {
+        if (part % 2) {
+            sum = sum + a[j];
+            partsArray.push(a[j]);
+            indexArray.push(j);
+            partsString += x[j].toString() + "<br>";
+        }       
+        part = Math.floor(part / 2);
+    }
+    if (sum == total) {
+        nrHits += 1;
+        oneHitArray = indexArray;
+        text += '<div class="result">' + partsString + "</div>";
+    }
+  }
+  if (text == "") {text = '<div class="result">Inget resultat</div>'};
+  document.getElementById("demo").innerHTML = text;
+}
+
+function parseCommaFloat(stringValue) {
+    stringValue = stringValue.trim();
+    var result = stringValue.replace(',', '.');
+    result = result.replace(/[^0-9\.]/g, '');
+
+    return parseFloat(result);
+}
+
+document.getElementById("numb").onclick = function () {
+    console.log("User moused down");
+    //return true;
+};
+
+</script>
+
+</body>
+</html> 
