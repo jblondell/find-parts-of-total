@@ -1,22 +1,36 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <meta name="viewport" content="width=360, initial-scale=1">
+</head>
 <body>
 
 <style> 
 body {
+  touch-action: pan-y; /* Prevent pinch to zoom (only allow pan-y) */
   background-color: #ededed;
+  margin: 0;
+  padding: 0 10px; /* Add padding on mobile to prevent edges from touching */
+  display: flex;
+  justify-content: center; /* Center content horizontally */
 }
 
 .content {
-  max-width: 300px;
-  margin: auto;
-  margin-top: 30px;
+  max-width: 350px; /* Maintain original width */
+  width: 100%; /* Allow full width on smaller screens */
+  margin-top: 15px;
   padding: 10px;
+  box-sizing: border-box;
+}
 
+#total, #numb, #button, .result {
+  width: 100%; /* Make each element span full width */
+  box-sizing: border-box;
+  margin-bottom: 10px; /* Add consistent margin to all */
 }
 
 #total {
-  border-radius: 5px;
+  border-radius: 7px;
   border: none;
   outline:none;
   background: white;
@@ -24,9 +38,9 @@ body {
   width: 100%;
   box-sizing: border-box;
   height: 40px;
-  margin-bottom: 7px;
+  /* margin-bottom: 10px; */
   letter-spacing: 2px;
-  font-size: 16px;
+  font-size: 20px;
   font-family: Helvetica, sans-serif;
   color: #5ac0ff;
   text-align: right;
@@ -34,7 +48,7 @@ body {
 
 #numb {
   white-space: pre-wrap;
-  border-radius: 5px;
+  border-radius: 7px;
   border: none;
   outline: none;
   background: white;
@@ -42,11 +56,11 @@ body {
   width: 100%;
   display: block;
   box-sizing: border-box;
-  height: 300px;
-  margin-bottom: 7px;
+  height: auto; /* Allow auto expansion */
+  min-height: 300px; /* Set the initial size to the current height */
   letter-spacing: 2px;
   line-height: 24px;
-  font-size: 16px;
+  font-size: 20px;
   font-family: Helvetica, sans-serif;
   color: #5ac0ff;
   text-align: right;
@@ -59,7 +73,7 @@ body {
 }
 
 #button {
-  border-radius: 5px;
+  border-radius: 7px;
   background-color: #37ed95;
   transition-duration: 0.4s;
   border: none;
@@ -70,7 +84,7 @@ body {
   text-decoration: none;
   display: inline-block;
   letter-spacing: 2px;
-  font-size: 16px;
+  font-size: 20px;
   font-family: Helvetica, sans-serif;
   cursor: pointer;
   width: 100%;
@@ -86,13 +100,13 @@ body {
 }
 
 .result {
-  border-radius: 5px;
+  border-radius: 7px;
   background-color: lightgray;
-  margin-top: 5px;
+  /*margin-top: 10px; */
   padding: 15px;
   letter-spacing: 2px;
   line-height: 24px;
-  font-size: 16px;
+  font-size: 20px;
   font-family: Helvetica, sans-serif;
 }
 
@@ -110,11 +124,22 @@ body {
 
 <button type="button" id="button" onclick="myFunction()">HITTA</button>
 
-<p id="demo"></p>
+<div id="demo"></div>
 
 </div>
 
 <script>
+
+function autoExpand() {
+    this.style.height = 'auto'; // Reset the height to allow shrinkage
+    this.style.height = this.scrollHeight + 'px'; // Set the height to the scrollHeight
+}
+
+// Set the initial height based on the content
+document.getElementById('numb').addEventListener('input', autoExpand);
+autoExpand.call(document.getElementById('numb')); // Call once to set the initial size
+ 
+
 function myFunction() {
   var x, a, b, n, text, nrHits;
   var i, j, part, sum, partsArray, indexArray, oneHitArray, partsString;
